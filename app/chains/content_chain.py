@@ -14,7 +14,7 @@ PLATFORM_PROMPTS = {
 }
 
 def get_llm(model_name: str):
-    model_id = AVAILABLE_MODELS.get(model_name, "llama3-8b-8192")
+    model_id = AVAILABLE_MODELS.get(model_name, "llama-3.1-8b-instant")
     return ChatGroq(
         api_key=GROQ_API_KEY,
         model_name=model_id,
