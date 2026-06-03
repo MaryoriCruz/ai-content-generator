@@ -5,6 +5,7 @@ load_dotenv()
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
+UNSPLASH_API_KEY = os.getenv("UNSPLASH_API_KEY")
 
 AVAILABLE_MODELS = {
     "LLaMA 3.1 8B (rápido)": "llama-3.1-8b-instant",
