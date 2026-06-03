@@ -13,6 +13,8 @@ dependencies = [
     "langchain-community>=0.4.2",
     "langchain-groq>=1.1.2",
     "langsmith>=0.8.8",
+    "pillow>=12.2.0",
     "python-dotenv>=1.2.2",
+    "requests>=2.33.1",
     "streamlit>=1.58.0",
 ]

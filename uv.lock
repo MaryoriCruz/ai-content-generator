@@ -26,7 +26,9 @@ dependencies = [
     { name = "langchain-community" },
     { name = "langchain-groq" },
     { name = "langsmith" },
+    { name = "pillow" },
     { name = "python-dotenv" },
+    { name = "requests" },
     { name = "streamlit" },
 ]
 
@@ -40,7 +42,9 @@ requires-dist = [
     { name = "langchain-community", specifier = ">=0.4.2" },
     { name = "langchain-groq", specifier = ">=1.1.2" },
     { name = "langsmith", specifier = ">=0.8.8" },
+    { name = "pillow", specifier = ">=12.2.0" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
+    { name = "requests", specifier = ">=2.33.1" },
     { name = "streamlit", specifier = ">=1.58.0" },
 ]
 
