@@ -3,7 +3,14 @@ from app.chains.content_chain import generate_content, PLATFORM_PROMPTS
 from app.utils.config import AVAILABLE_MODELS
 from app.utils.image_generator import get_unsplash_image
 from app.utils.image_generator import get_image
+from app.utils.config import AVAILABLE_MODELS, setup_langsmith
 
+# Activar LangSmith al arrancar
+@st.cache_resource
+def init_langsmith():
+    setup_langsmith()
+
+init_langsmith()
 
 st.set_page_config(
     page_title="AI Content Generator",
