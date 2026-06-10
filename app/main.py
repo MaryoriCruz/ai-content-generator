@@ -27,6 +27,11 @@ with st.sidebar:
     model = st.selectbox("🤖 Modelo LLM", list(AVAILABLE_MODELS.keys()))
     language = st.selectbox("🌍 Idioma", ["Español", "English", "Français", "Italiano"])
     generate_img = st.toggle("🖼️ Generar imagen", value=False)
+    # En el sidebar, debajo del toggle de imagen:
+financial_mode = st.toggle("📈 Modo noticias financieras", value=False)
+
+if financial_mode:
+    st.info("💡 Introduce un ticker bursátil como tema\nEj: AAPL, TSLA, MSFT, BTC")
 
     st.divider()
     st.subheader("🏢 Perfil (opcional)")
@@ -67,7 +72,9 @@ if st.button("🚀 Generar contenido", type="primary", use_container_width=True)
                 model_name=model,
                 company_name=company_name,
                 company_description=company_description,
-                tone=tone
+                tone=tone,
+                financial_mode=financial_mode
+
             )
         
         image_pil, image_url, image_source = None, None, None
