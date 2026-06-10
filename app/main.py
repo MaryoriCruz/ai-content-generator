@@ -1,9 +1,7 @@
 import streamlit as st
 from app.chains.content_chain import generate_content, PLATFORM_PROMPTS
-from app.utils.config import AVAILABLE_MODELS
-from app.utils.image_generator import get_unsplash_image
-from app.utils.image_generator import get_image
 from app.utils.config import AVAILABLE_MODELS, setup_langsmith
+from app.utils.image_generator import get_image
 
 # Activar LangSmith al arrancar
 @st.cache_resource
@@ -27,11 +25,16 @@ with st.sidebar:
     model = st.selectbox("🤖 Modelo LLM", list(AVAILABLE_MODELS.keys()))
     language = st.selectbox("🌍 Idioma", ["Español", "English", "Français", "Italiano"])
     generate_img = st.toggle("🖼️ Generar imagen", value=False)
-    # En el sidebar, debajo del toggle de imagen:
-financial_mode = st.toggle("📈 Modo noticias financieras", value=False)
+    financial_mode = st.toggle("📈 Modo noticias financieras", value=False)
+    scientific_mode = st.toggle("🔬 Modo científico RAG (IA/ML)", value=False)
 
-if financial_mode:
-    st.info("💡 Introduce un ticker bursátil como tema\nEj: AAPL, TSLA, MSFT, BTC")
+    if financial_mode:
+        st.info("💡 Introduce un ticker bursátil\nEj: AAPL, TSLA, MSFT, BTC")
+    if scientific_mode:
+        st.info("💡 Introduce un tema de IA/ML\nEj: transformers, diffusion models")
+    if financial_mode and scientific_mode:
+        st.warning("⚠️ Activa solo un modo a la vez")
+        scientific_mode = False
 
     st.divider()
     st.subheader("🏢 Perfil (opcional)")
@@ -64,7 +67,7 @@ if st.button("🚀 Generar contenido", type="primary", use_container_width=True)
         st.warning("⚠️ Por favor define la audiencia")
     else:
         with st.spinner(f"✨ Generando contenido para {platform}..."):
-            result = generate_content(
+            result, papers = generate_content(
                 topic=topic,
                 platform=platform,
                 audience=audience,
@@ -73,10 +76,15 @@ if st.button("🚀 Generar contenido", type="primary", use_container_width=True)
                 company_name=company_name,
                 company_description=company_description,
                 tone=tone,
-                financial_mode=financial_mode
-
+                financial_mode=financial_mode,
+                scientific_mode=scientific_mode
             )
-        
+
+        if papers:
+            with st.expander("📚 Papers de arXiv utilizados como fuente"):
+                for paper in papers:
+                    st.markdown(f"- [{paper['title']}]({paper['url']}) — {paper['published']} — `{paper['categories']}`")
+
         image_pil, image_url, image_source = None, None, None
         if generate_img:
             with st.spinner("🎨 Generando imagen..."):
@@ -84,7 +92,7 @@ if st.button("🚀 Generar contenido", type="primary", use_container_width=True)
 
         st.success("¡Contenido generado! ✅")
         st.divider()
-        
+
         if image_pil:
             st.image(image_pil, caption=f"🤖 Generada con IA · {topic}", width="stretch")
             st.divider()
@@ -99,7 +107,3 @@ if st.button("🚀 Generar contenido", type="primary", use_container_width=True)
             st.markdown(result)
         with tab2:
             st.code(result, language=None)
-        
-        
-
-    
