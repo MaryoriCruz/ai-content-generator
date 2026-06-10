@@ -2,12 +2,13 @@ from langchain_groq import ChatGroq
 from langchain_core.output_parsers import StrOutputParser
 from app.utils.config import GROQ_API_KEY, AVAILABLE_MODELS
 from app.utils.financial_news import get_financial_news, format_news_context
+from app.rag.arxiv_rag import get_relevant_context
 from prompts.blog import blog_prompt
 from prompts.twitter import twitter_prompt
 from prompts.instagram import instagram_prompt
 from prompts.linkedin import linkedin_prompt
 from prompts.financial import financial_prompt
-
+from prompts.scientific import scientific_prompt
 
 PLATFORM_PROMPTS = {
     "Blog": blog_prompt,
@@ -33,8 +34,10 @@ def generate_content(
     company_name: str = "",
     company_description: str = "",
     tone: str = "",
-    financial_mode: bool = False
-) -> str:
+    financial_mode: bool = False,
+    scientific_mode: bool = False
+) -> tuple[str, list[dict]]:
+
     if company_name:
         company_context = f"""Estás generando contenido para: {company_name}
 Descripción: {company_description}
@@ -42,14 +45,14 @@ Tono de voz: {tone}
 Asegúrate de que el contenido refleje la identidad de esta marca."""
     else:
         company_context = ""
-        
+
     llm = get_llm(model_name)
-    
+
     if financial_mode:
         news = get_financial_news(topic)
         news_context = format_news_context(news)
         chain = financial_prompt | llm | StrOutputParser()
-        return chain.invoke({
+        result = chain.invoke({
             "topic": topic,
             "platform": platform,
             "audience": audience,
@@ -57,14 +60,27 @@ Asegúrate de que el contenido refleje la identidad de esta marca."""
             "company_context": company_context,
             "news_context": news_context
         })
+        return result, []
+
+    if scientific_mode:
+        scientific_context, papers = get_relevant_context(topic)
+        chain = scientific_prompt | llm | StrOutputParser()
+        result = chain.invoke({
+            "topic": topic,
+            "platform": platform,
+            "audience": audience,
+            "language": language,
+            "company_context": company_context,
+            "scientific_context": scientific_context
+        })
+        return result, papers
 
     prompt = PLATFORM_PROMPTS.get(platform, blog_prompt)
-    llm = get_llm(model_name)
     chain = prompt | llm | StrOutputParser()
-
-    return chain.invoke({
+    result = chain.invoke({
         "topic": topic,
         "audience": audience,
         "language": language,
         "company_context": company_context
     })
+    return result, []
