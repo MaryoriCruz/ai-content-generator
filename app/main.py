@@ -67,7 +67,7 @@ if st.button("🚀 Generar contenido", type="primary", use_container_width=True)
         st.warning("⚠️ Por favor define la audiencia")
     else:
         with st.spinner(f"✨ Generando contenido para {platform}..."):
-            result, papers = generate_content(
+            result, papers, evaluation = generate_content(
                 topic=topic,
                 platform=platform,
                 audience=audience,
@@ -91,6 +91,8 @@ if st.button("🚀 Generar contenido", type="primary", use_container_width=True)
                 image_pil, image_url, image_source = get_image(topic, platform)
 
         st.success("¡Contenido generado! ✅")
+        with st.expander(f"🛡️ Evaluación de calidad · Score: {evaluation.get('score', '-')}/10"):
+            st.json(evaluation)
         st.divider()
 
         if image_pil:
