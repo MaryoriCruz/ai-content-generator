@@ -9,6 +9,7 @@ from prompts.instagram import instagram_prompt
 from prompts.linkedin import linkedin_prompt
 from prompts.financial import financial_prompt
 from prompts.scientific import scientific_prompt
+from app.utils.guardrails import evaluate_content, passes_guardrails
 
 PLATFORM_PROMPTS = {
     "Blog": blog_prompt,
@@ -25,7 +26,7 @@ def get_llm(model_name: str):
         temperature=0.7
     )
 
-def generate_content(
+def _generate_raw(
     topic: str,
     platform: str,
     audience: str,
@@ -36,7 +37,7 @@ def generate_content(
     tone: str = "",
     financial_mode: bool = False,
     scientific_mode: bool = False
-) -> tuple[str, list[dict]]:
+) -> tuple[str, list[dict], dict]:
 
     if company_name:
         company_context = f"""Estás generando contenido para: {company_name}
@@ -84,3 +85,35 @@ Asegúrate de que el contenido refleje la identidad de esta marca."""
         "company_context": company_context
     })
     return result, []
+
+def generate_content(
+    topic: str,
+    platform: str,
+    audience: str,
+    language: str,
+    model_name: str,
+    company_name: str = "",
+    company_description: str = "",
+    tone: str = "",
+    financial_mode: bool = False,
+    scientific_mode: bool = False
+) -> tuple[str, list[dict], dict]:
+    """
+    Genera contenido y lo evalúa con guardrails.
+    Si no pasa, reintenta una vez.
+    Devuelve: (contenido, papers, evaluación)
+    """
+    result, papers = _generate_raw(
+        topic, platform, audience, language, model_name,
+        company_name, company_description, tone,
+        financial_mode, scientific_mode
+    )
+    evaluation = evaluate_content(topic, platform, result)
+    if not passes_guardrails(evaluation):
+        result, papers = _generate_raw(
+            topic, platform, audience, language, model_name,
+            company_name, company_description, tone,
+            financial_mode, scientific_mode
+        )
+        evaluation = evaluate_content(topic, platform, result)
+    return result, papers, evaluation
