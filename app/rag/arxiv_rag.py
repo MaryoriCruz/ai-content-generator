@@ -1,6 +1,7 @@
 import torch
 import arxiv
 import os
+import chromadb
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -61,7 +62,13 @@ def build_vectorstore(documents: list[Document], topic: str) -> Chroma:
     embeddings = get_embeddings()
     
     # Usar colección única por topic para evitar mezclar papers
-    collection_name = f"arxiv_{topic[:20].replace(' ', '_').lower()}"
+    collection_name = "arxiv_docs"
+    
+    client = chromadb.PersistentClient(path=CHROMA_PATH)
+    try:
+        client.delete_collection(collection_name)
+    except Exception:
+        pass
     
     vectorstore = Chroma.from_documents(
         documents=chunks,
