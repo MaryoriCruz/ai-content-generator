@@ -26,7 +26,6 @@ with col_title:
 with col_badge:
     st.markdown("")
     st.markdown("")
-    st.markdown("🚀 **Powered by Groq + LangChain**")
 
 st.divider()
 
