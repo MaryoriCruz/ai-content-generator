@@ -184,8 +184,13 @@ Todas las peticiones quedan registradas en [LangSmith](https://smith.langchain.c
 
 ## 👤 Autora
 
+## 👤 Autora
+
 Maryori Cruz — Bootcamp de Inteligencia Artificial, Factoría F5
 
+- 🔗 [Artículo en Medium]([text](https://medium.com/@maryori.eguizabal/de-cero-a-un-generador-de-contenido-con-ia-en-2-semanas-mi-proyecto-solo-con-langchain-rag-y-groq-bde533e34991))
+- 💼 [LinkedIn]([text](https://www.linkedin.com/in/maryori-cruz/))
+- 🐙 [GitHub](https://github.com/Bootcamp-IA-P6/ai-content-generator)
 ---
 
 ## 📄 Licencia
