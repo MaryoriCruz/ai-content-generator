@@ -3,12 +3,12 @@ from langchain_core.output_parsers import StrOutputParser
 from app.utils.config import GROQ_API_KEY, AVAILABLE_MODELS
 from app.utils.financial_news import get_financial_news, format_news_context
 from app.rag.arxiv_rag import get_relevant_context
-from prompts.blog import blog_prompt
-from prompts.twitter import twitter_prompt
-from prompts.instagram import instagram_prompt
-from prompts.linkedin import linkedin_prompt
-from prompts.financial import financial_prompt
-from prompts.scientific import scientific_prompt
+from app.prompts.blog import blog_prompt
+from app.prompts.twitter import twitter_prompt
+from app.prompts.instagram import instagram_prompt
+from app.prompts.linkedin import linkedin_prompt
+from app.prompts.financial import financial_prompt
+from app.prompts.scientific import scientific_prompt
 from app.utils.guardrails import evaluate_content, passes_guardrails
 
 PLATFORM_PROMPTS = {
