@@ -3,7 +3,7 @@
 ![Banner](assets/banner.png)
 
 <p align="center">
-  <a href="https://tu-demo.streamlit.app">🌐 Live Demo</a> ·
+  <a href="https://ai-content-generator-aphfmusyp8wrqtdgpvuhbp.streamlit.app/">🌐 Live Demo</a> ·
   <a href="https://github.com/MaryoriCruz/ai-content-generator">📂 Repository</a>
 </p>
 
