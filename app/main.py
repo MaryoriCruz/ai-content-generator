@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import streamlit as st
 from app.chains.content_chain import generate_content, PLATFORM_PROMPTS
 from app.utils.config import AVAILABLE_MODELS, setup_langsmith
